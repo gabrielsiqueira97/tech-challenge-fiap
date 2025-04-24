@@ -1,0 +1,21 @@
+# Arquivos e pastas típicos de Python a serem ignorados
+__pycache__/
+*.py[cod]
+*.so
+
+# Ambientes virtuais
+env*/
+venv*/
+*/env*/
+*/venv*/
+**/env*/
+**/venv*/
+
+# Arquivos de configuração
+*.log
+*.sqlite3
+
+# Configs do VSCode e afins
+.vscode/
+.idea/
+.DS_Store
