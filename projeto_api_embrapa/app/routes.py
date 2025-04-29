@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Query, Depends, HTTPException, status
-from app.services import consultar_producao_por_ano, consultar_processamento_uva
+from app.services import consultar_producao_por_ano, consultar_processamento_uva,get_comercializacao, get_exportacao, get_importacao
 from app.auth import gerar_hash_senha, obter_conexao_banco, criar_token_jwt, verificar_token_jwt
 from app.models import Usuario, TokenJWT
+ 
+
 
 router = APIRouter()
     
@@ -59,3 +61,34 @@ def get_processamento_uvas(
     """Retorna dados de processamento filtrados (Apenas com autenticação JWT)"""
     dados = consultar_processamento_uva(tipo_de_uva, grupo_de_uva, nm_uva, ano)
     return {"usuario": usuario, "total": len(dados), "dados": dados}
+
+@router.get("/comercializacao/{ano}")
+def get_comercializacao_por_ano(
+    ano: int, 
+    usuario: str = Depends(verificar_token_jwt),
+    produto_principal: str = Query(None, description="Filtrar por produto principal"),
+    subproduto: str = Query(None, description="Filtrar por subproduto")
+):
+    """Retorna dados de comercialização filtrados por ano, produto principal e subproduto (Apenas com autenticação JWT)"""
+    produtos = get_comercializacao(produto_principal, subproduto, ano)
+    return {"usuario": usuario, "ano": ano, "produto_principal": produto_principal, "subproduto": subproduto, "produtos": produtos}
+
+@router.get("/exportacao/{ano}")
+def get_exportacao_por_ano(
+    ano: int, 
+    usuario: str = Depends(verificar_token_jwt),
+    pais: str = Query(None, description="Filtrar por país")
+):
+    """Retorna dados de exportação filtrados por ano e país (Apenas com autenticação JWT)"""
+    produtos = get_exportacao(pais, ano)
+    return {"usuario": usuario, "ano": ano, "pais": pais, "produtos": produtos}
+
+@router.get("/importacao/{ano}")
+def get_importacao_por_ano(
+    ano: int, 
+    usuario: str = Depends(verificar_token_jwt),
+    pais: str = Query(None, description="Filtrar por país")
+):
+    """Retorna dados de importação filtrados por ano e país (Apenas com autenticação JWT)"""
+    produtos = get_importacao(pais, ano)
+    return {"usuario": usuario, "ano": ano, "pais": pais, "produtos": produtos}

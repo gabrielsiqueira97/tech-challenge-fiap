@@ -10,7 +10,7 @@ cursor = conn.cursor()
 
 # Criar tabela
 def criar_tabela_processamento_uvas():
-    cursor.execute("DROP TABLE processamento_uvas") 
+    cursor.execute("DROP TABLE IF EXISTS processamento_uvas") 
     cursor.execute("""
     CREATE TABLE processamento_uvas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +26,7 @@ def criar_tabela_processamento_uvas():
     print("Tabela processamento uvas criada!")
 
 def criar_tabela_producao_produtos():
-    cursor.execute("DROP TABLE producao_produtos") 
+    cursor.execute("DROP TABLE IF EXISTS producao_produtos") 
     cursor.execute("""
     CREATE TABLE producao_produtos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,10 +39,56 @@ def criar_tabela_producao_produtos():
     conn.commit()
     conn.close()
     print("Tabela produção produtos criada!")
-    
+
+def criar_tabela_comercializacao_produtos():
+    cursor.execute("DROP TABLE IF EXISTS comercializacao_produtos")  # Garante que a tabela seja recriada
+    cursor.execute("""
+    CREATE TABLE comercializacao_produtos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        produto_principal TEXT NOT NULL,
+        subproduto TEXT NOT NULL,
+        quantidade_l INTEGER,
+        ano INTEGER NOT NULL
+    );
+    """)
+
+    conn.commit()
+    print("Tabela comercialização produtos criada!")
+
+def criar_tabela_importacao_produtos():
+    cursor.execute("DROP TABLE IF EXISTS importacao_produtos")  # Garante que a tabela seja recriada
+    cursor.execute("""
+    CREATE TABLE importacao_produtos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pais TEXT NOT NULL,
+        quantidade_kg INTEGER,
+        valor_usd REAL,
+        tipo_de_uva TEXT,
+        ano INTEGER NOT NULL                   
+    );
+    """)
+    conn.commit()
+    print("Tabela importação de produtos criada!")
+
+
+def criar_tabela_exportacao_produtos():
+    cursor.execute("DROP TABLE IF EXISTS exportacao_produtos")  # Garante que a tabela seja recriada
+    cursor.execute("""
+    CREATE TABLE exportacao_produtos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pais TEXT NOT NULL,
+        quantidade_kg INTEGER,
+        valor_usd REAL,
+        tipo_de_uva TEXT,
+        ano INTEGER NOT NULL                   
+    );
+    """)
+    conn.commit()
+    print("Tabela exportação de produtos criada!")
+
 def criar_tabela_usuarios():
     """Cria a tabela de usuários no banco de dados"""
-    cursor.execute("DROP TABLE usuarios") 
+    cursor.execute("DROP TABLE IF EXISTS usuarios") 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,4 +104,7 @@ def criar_tabela_usuarios():
 
 criar_tabela_processamento_uvas()
 criar_tabela_producao_produtos()
+criar_tabela_comercializacao_produtos()
+criar_tabela_importacao_produtos()
+criar_tabela_exportacao_produtos()
 criar_tabela_usuarios()

@@ -1,6 +1,8 @@
 import sqlite3
 from app.models import ProducaoUva
 from app.models import ProcessamentoUva
+from app.models import ComercializacaoProduto, ExportacaoProduto, ImportacaoProduto
+
 
 def get_db_connection():
     """Conectar ao banco SQLite"""
@@ -57,3 +59,66 @@ def consultar_processamento_uva(tipo_de_uva: str = None, grupo_de_uva: str = Non
         for row in dados
     ]
 
+
+#API Comercialização
+def get_comercializacao(produto_principal=None, subproduto=None, ano=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM comercializacao_produtos WHERE 1=1"
+    params = []
+
+    if produto_principal:
+        query += " AND produto_principal = ?"
+        params.append(produto_principal)
+    if subproduto:
+        query += " AND subproduto = ?"
+        params.append(subproduto)
+    if ano:
+        query += " AND ano = ?"
+        params.append(ano)
+
+    cursor.execute(query, params)
+    dados = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in dados]
+
+#API Exportacao
+def get_exportacao(pais=None, ano=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM exportacao_produtos WHERE 1=1"
+    params = []
+
+    if pais:
+        query += " AND pais = ?"
+        params.append(pais)
+    if ano:
+        query += " AND ano = ?"
+        params.append(ano)
+
+    cursor.execute(query, params)
+    dados = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in dados]
+
+#API Importacao
+def get_importacao(pais=None, ano=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM importacao_produtos WHERE 1=1"
+    params = []
+
+    if pais:
+        query += " AND pais = ?"
+        params.append(pais)
+    if ano:
+        query += " AND ano = ?"
+        params.append(ano)
+
+    cursor.execute(query, params)
+    dados = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in dados]

@@ -27,6 +27,7 @@ def extrair_dados_processamento():
     cursor = conn.cursor()
     cursor.execute("DELETE FROM processamento_uvas") #Limpando a base de dados para uma carga FULL
     print("Tabela limpa pronta para nova carga FULL")
+    
     for ano in range(1970, datetime.now().year):  # De 1970 até o ano atual
         for nome_filtro, filtro in FILTROS_UVAS.items():
             url = BASE_URL.format(filtro, ano)
